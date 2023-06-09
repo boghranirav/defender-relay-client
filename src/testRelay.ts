@@ -6,11 +6,39 @@ import {
 } from "defender-relay-client/lib/ethers";
 import { polygonTestABI } from "./abi/polygonContractABI";
 
+const networkInfo = {
+  ETH_MAINNET: {
+    URL: `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_KEY}`,
+    NAME: "ETH_MAINNET",
+  },
+  POLYGON_MAINNET: {
+    URL: `wss://polygon-mumbai.g.alchemy.com/v2/${process.env.POLYGON_ALCHEMY}`,
+    NAME: "POLYGON_MUMBAI",
+  },
+  ARBITRUM_MAINNET: {
+    URL: `wss://arb-mainnet.g.alchemy.com/v2/${process.env.ARBITRUM_ALCHEMY}`,
+    NAME: "ARBITRUM_MAINNET",
+  },
+  OPTIMISM_MAINNET: {
+    URL: `wss://opt-mainnet.g.alchemy.com/v2/${process.env.OPTIMISM_ALCHEMY}`,
+    NAME: "OPTIMISM_MAINNET",
+  },
+};
+
 export const testWebSocket = async () => {
   try {
-    const provider = new ethers.providers.WebSocketProvider(
-      `wss://polygon-mainnet.g.alchemy.com/v2/${process.env.POLYGON_ALCHEMY}`
-    );
+    getBlockDetails(networkInfo.ETH_MAINNET);
+    getBlockDetails(networkInfo.POLYGON_MAINNET);
+    getBlockDetails(networkInfo.ARBITRUM_MAINNET);
+    getBlockDetails(networkInfo.OPTIMISM_MAINNET);
+  } catch (error: any) {
+    console.log(error.message);
+  }
+};
+
+const getBlockDetails = async (providerInfo: { URL: string; NAME: string }) => {
+  try {
+    const provider = new ethers.providers.WebSocketProvider(providerInfo.URL);
     provider.on("block", async (blockNumber) => {
       // Fetch the block and get all transactions
       const block = await provider.getBlock(blockNumber);
@@ -24,6 +52,7 @@ export const testWebSocket = async () => {
 
           // Check if the transaction has logs/events
           if (receipt && receipt.logs.length > 0) {
+            // console.log("Transaction for :", providerInfo.NAME);
             console.log("Transaction Hash:", transaction?.hash);
             console.log("Events:", receipt.logs);
             console.log("------------------------");
@@ -55,7 +84,7 @@ export const sendMessageOnPolygon = async () => {
       polygonTestABI,
       signer
     );
-    const updateMessage = "TestMyMsg";
+    const updateMessage = "TestMyMsg 2";
     const transaction = await contractInterface.populateTransaction.update(
       updateMessage
     );

@@ -14,6 +14,8 @@ declare global {
       DEFENDER_API_KEY: string;
       DEFENDER_API_SECRET: string;
       WALLET_PRIVATE_KEY: string;
+      ARBITRUM_ALCHEMY: string;
+      OPTIMISM_ALCHEMY: string;
     }
   }
 }

@@ -32,8 +32,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// testWebSocket().catch(console.error);
-sendMessageOnPolygon();
+testWebSocket().catch(console.error);
+// sendMessageOnPolygon();
 
 app.listen(port, () => {
   console.log(
