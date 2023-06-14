@@ -2,7 +2,12 @@ import "dotenv/config";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { sendMessageOnPolygon, testWebSocket } from "./testRelay";
+import {
+  requestScoreOnArbitrum,
+  requestScoreOnEth,
+  requestScoreOnPolygon,
+} from "./requestScore";
+import { startReputeXRelay } from "./configureNetwork";
 
 const app = express();
 const port = process.env.PORT;
@@ -32,8 +37,11 @@ app.use((req, res, next) => {
   next();
 });
 
-testWebSocket().catch(console.error);
-// sendMessageOnPolygon();
+startReputeXRelay();
+setTimeout(() => {
+  // requestScoreOnArbitrum("0x5DD596C901987A2b28C38A9C1DfBf86fFFc15d77");
+  requestScoreOnEth("0x5DD596C901987A2b28C38A9C1DfBf86fFFc15d77");
+}, 1000);
 
 app.listen(port, () => {
   console.log(

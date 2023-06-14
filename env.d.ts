@@ -16,6 +16,9 @@ declare global {
       WALLET_PRIVATE_KEY: string;
       ARBITRUM_ALCHEMY: string;
       OPTIMISM_ALCHEMY: string;
+      ETHEREUM_ALCHEMY: string;
+      REPUTEX_ACCESS_KEY: string;
+      REPUTEX_SECRET_KEY: string;
     }
   }
 }
